@@ -46,7 +46,7 @@ componentWillMount() {
       if(this.state.loggedIn == false){
         return <Login saveToken={this.saveToken} />
       } else {
-        return <Main logout={this.logout} />
+        return <Main logout={this.logout} loaded={false} />
       }
     }
 

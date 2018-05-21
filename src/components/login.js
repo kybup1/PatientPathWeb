@@ -19,7 +19,7 @@ export default class Login extends Component {
       }
 
     loginHandler = (e) => {
-        fetch('http://147.87.116.42:54321/login/practicioner', {
+        fetch('http://patientpath.i4mi.bfh.ch:1234/login/practitioner', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
