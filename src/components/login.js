@@ -2,13 +2,16 @@ import React, { Component, Modal} from 'react'
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import Dialog from "material-ui/Dialog";
+import ErrorDialog from "./ErrorDialog"
 
 export default class Login extends Component {
     constructor(props) {
         super(props);
         this.state = {
             username:null,
-            password:null
+            password:null,
+            error:false,
+            errorMessage:"",
         };    
     }
 
@@ -16,7 +19,11 @@ export default class Login extends Component {
         this.setState({
           [e.target.name]: e.target.value,
         });
-      }
+    }
+
+    closeError = () => {
+        this.setState({error:false,errorMessage:""})
+    }
 
     loginHandler = (e) => {
         fetch('http://patientpath.i4mi.bfh.ch:1234/login/practitioner', {
@@ -33,9 +40,9 @@ export default class Login extends Component {
            if(data.token){
                this.props.saveToken(data.token)
            } else {
-                <Dialog />
+                this.setState({error:true,errorMessage:"Benutzername oder Passwort falsch"})
            }
-       })
+       }) .catch(err => this.setState({error:true,errorMessage:"Ein unbekannter Fehler ist aufgetreten"}))
        
     }
 
@@ -63,6 +70,11 @@ export default class Login extends Component {
                 <RaisedButton 
                     label = "Login"
                     onClick={() => this.loginHandler()} 
+                />
+                <ErrorDialog 
+                    open={this.state.error}
+                    close={this.closeError}
+                    message={this.state.errorMessage}
                 />
             </div>
         </div>

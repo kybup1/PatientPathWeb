@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import Tabs from "material-ui/Tabs/Tabs";
 import Tab from "material-ui/Tabs/Tab";
 import { RaisedButton } from 'material-ui';
-import AppointmentManager from "./AppointmentManager"
+import AppointmentManager from "./AppointmentManager";
+import ErrorDialog from "./ErrorDialog"
 
 
 export default class Main extends Component {
@@ -10,11 +11,21 @@ export default class Main extends Component {
         super(props);
         this.state = {
             practitioner:null,
-            loaded:false
+            loaded:false,
+            error:false,
+            errorMessage:""
         };    
     }
 
     componentWillMount(){
+        this.updatePracticioner()
+    }
+
+    componentWillUpdate(){
+        this.updatePracticioner()
+    }
+
+    updatePracticioner = () => {
         let token = localStorage.getItem("token");
         
         if (this.state.loaded == false){
@@ -25,9 +36,13 @@ export default class Main extends Component {
             }).then(res => res.json())
             .then((pract) => {
                 this.setState({loaded : true, practitioner : pract});
-            }).catch(reason => console.log(reason))
+            }).catch(reason => this.setState({error:true,errorMessage:"Es kann keine Verbindung zum Server hergestellt werden."}))
             
         }
+    }
+
+    closeError = () => {
+        this.setState({error:false,errorMessage:""})
     }
 
     loaded = () => {
@@ -38,7 +53,7 @@ export default class Main extends Component {
                         <h1>PatientPath</h1>
                     </div>
                     <div className = "user">
-                        <p>Logged in as: {this.state.practitioner.firstname} {this.state.practitioner.lastname} </p>
+                        <p>Eingeloggt als: {this.state.practitioner.firstname} {this.state.practitioner.lastname} </p>
                 
                         <RaisedButton 
                         label = "Log out"
@@ -84,6 +99,11 @@ export default class Main extends Component {
         return (
             <div>
             {checkLoaded()}
+                <ErrorDialog 
+                    open={this.state.error}
+                    close={this.closeError}
+                    message={this.state.errorMessage}
+                />
             </div>
         )
     }
