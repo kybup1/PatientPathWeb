@@ -29,9 +29,11 @@ export default class PatientSelector extends Component {
     }
 
     componentWillUpdate(nextProps, nextState){
+        //filters the patients with the given searchterm through the inputfield
         this.filterPats(nextState.searchTerm)
     }
 
+    //filters the array of patients
     filterPats = (searchterm) => {
         this.patsFiltered = this.patients.filter(pat => 
             pat.firstname.toLowerCase().includes(searchterm.toLowerCase()) || 
@@ -39,6 +41,7 @@ export default class PatientSelector extends Component {
         
     }
 
+    //is called if no patient is selected
     resetSelection = () => {
         this.setState({searchTerm:""})
         this.props.setPat(0)

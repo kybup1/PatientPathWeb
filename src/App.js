@@ -15,6 +15,8 @@ class App extends Component {
     };    
 }
 
+//This mehtod is called when the login is successfully
+//The token is saved into localStorage
 saveToken = (token) => {
   this.setState({
     token : token,
@@ -23,6 +25,8 @@ saveToken = (token) => {
   localStorage.setItem("token", token);
 }
 
+//this method is called when the logout button is pressed
+//The token is removed from the localStorage
 logout = () => {
   localStorage.removeItem("token");
   this.setState({
@@ -42,6 +46,7 @@ componentWillMount() {
 
   render() {
 
+    //Checks if a practitioner is logged in and returns the coresponding content
     let authenticate = () => {
       if(this.state.loggedIn == false){
         return <Login saveToken={this.saveToken} />

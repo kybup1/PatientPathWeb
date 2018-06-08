@@ -15,6 +15,7 @@ export default class AppointmentCard extends Component {
 
     token = localStorage.getItem("token");
 
+    //opens the edit window for an appointment
     openAppoEdit = () => {
         this.setState({appoEditOpen:true})
     }
@@ -24,6 +25,8 @@ export default class AppointmentCard extends Component {
         this.props.update()
     }
 
+    //opens the edit window for the checklist of an appointment
+    //if the appointment has no checklist a new one will be created
     openChecklistEdit = () => {
         if (this.props.appointment.checklist==null){
             let checklist = {}
@@ -48,6 +51,7 @@ export default class AppointmentCard extends Component {
         this.props.update()
     }
 
+    //sets the color of the checklist icon depending if an checklist is present or not
     setchecklistColor = () => {
         if(this.props.appointment.checklist==null){
             return "#a0a0a0"
@@ -56,6 +60,7 @@ export default class AppointmentCard extends Component {
         }
     }
 
+    //The style is of an AppointmentCard is set differently depending if it lies in the past or not
     setAppoStyle = () => {
         if(new Date(this.props.appointment.startdate) < new Date()){
             return {color:"grey"}
@@ -72,6 +77,7 @@ export default class AppointmentCard extends Component {
         }
     }
 
+    //the checklist button
     checklistButton = (
         <IconButton
           touch={true}
@@ -114,10 +120,7 @@ export default class AppointmentCard extends Component {
         )
   }
 
-  dialog(){
-
-  }
-
+  //Converts the startdate property of an appointment into a normal time format
   convertTime(dateString) {
     let day,month,year,hour,minute;
     

@@ -15,16 +15,20 @@ export default class Login extends Component {
         };    
     }
 
+    //Updates the state when a input is changed
     onChange = (e) => {
         this.setState({
           [e.target.name]: e.target.value,
         });
     }
 
+    //Is called when the ErrorDialog is closed
     closeError = () => {
         this.setState({error:false,errorMessage:""})
     }
 
+    //Is called when the login button is pressed
+    //Sends the POST request with the logindata to the server and updates the state if the login is successfully
     loginHandler = (e) => {
         fetch('http://patientpath.i4mi.bfh.ch:1234/login/practitioner', {
             method: 'POST',

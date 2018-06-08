@@ -25,6 +25,7 @@ export default class Main extends Component {
         this.updatePracticioner()
     }
 
+    //loads the practitioner and sets the state to loaded if successfully
     updatePracticioner = () => {
         let token = localStorage.getItem("token");
         
@@ -41,10 +42,13 @@ export default class Main extends Component {
         }
     }
 
+    //Is called when the ErrorDialog is has to be closed
     closeError = () => {
         this.setState({error:false,errorMessage:""})
     }
 
+    //The content that will be rendered if the state property loaded is set to true
+    //This is rendered when the practitioner is loaded successfully
     loaded = () => {
         return (
             <div className = "main">
@@ -75,12 +79,14 @@ export default class Main extends Component {
         )
     }
 
+    //Is rendered when the state property loaded is set to false
     notLoaded = () => {
         return (
             <h1>loading...</h1>
         )
     }
 
+    //This method is called when the logout button is pressed and triggers the parent logout method
     logout () {
         this.setState({loaded : false});
         this.props.logout()
@@ -88,6 +94,7 @@ export default class Main extends Component {
 
     render() {
 
+        //Here the state property loaded is checked and the corresponding content will be rendered
         let checkLoaded = () => {
             if (this.state.loaded == false){
                 return this.notLoaded()

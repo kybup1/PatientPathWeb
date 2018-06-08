@@ -12,7 +12,7 @@ export default class AppointmentModifier extends Component {
 
     token = localStorage.getItem("token")
 
-
+    //is called when a value of an input field is changed
     appoChange = (e) => {
         let appo = this.state.appo;
         appo[e.target.name] = e.target.value;
@@ -21,7 +21,10 @@ export default class AppointmentModifier extends Component {
         });
     }
 
+    //sets the startdate of an appointment
     startDateChange = (e, date) => {
+        //a workaround for the fact that the tostring method of a JS Date object 
+        //allways converts the time to the local timezone.
         date.setHours(date.getHours()-(date.getTimezoneOffset()/60))
         let appo = this.state.appo
         appo.startdate=date.toISOString()
@@ -29,6 +32,7 @@ export default class AppointmentModifier extends Component {
         this.setState({"appo":appo})
     }
 
+    //calculates the enddate property of an appointment depending on the duration that is set
     calculateEndDate = () => {
         let startd = new Date(this.state.appo.startdate)
         let duration = this.state.duration
@@ -38,9 +42,12 @@ export default class AppointmentModifier extends Component {
         return endd.toISOString()
     }
 
+    //saves the appointment to the server
     persist = () => {
         let appo = this.state.appo
         let duration = this.state.duration
+        //A new object is created since the fetched object contains also linked information
+        //such as patientdata in an array. This can not be send to the server in this format.
         let appoSave = {}
         appoSave.aid = appo.aid;
         appoSave.name = appo.name;
@@ -48,6 +55,7 @@ export default class AppointmentModifier extends Component {
         appoSave.startdate = appo.startdate;
         appoSave.enddate = appo.enddate;
         appoSave.modified = appo.modified;
+        //sets the patid depending if a new appointment is created or not
         if(this.props.create == false){
             appoSave.patid = appo.patient.patid;
         } else {
@@ -59,8 +67,7 @@ export default class AppointmentModifier extends Component {
             appoSave.enddate = this.calculateEndDate();
         }
 
-        console.log(JSON.stringify(appoSave))
-
+        //depending if a new appointment is created or not a POST or PUT request will be send
         if(this.props.create == false){
             fetch("http://patientpath.i4mi.bfh.ch:1234/appointment/"+appoSave.aid, {
                 method:"PUT",

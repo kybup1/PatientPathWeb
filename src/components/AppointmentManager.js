@@ -32,8 +32,8 @@ export default class AppointmentManager extends Component {
         this.loadAppointments()
     }
 
-    loadAppointments = () => {
-        
+    //Gets all appointments of a practitioner and saves them in the state
+    loadAppointments = () => { 
             fetch('http://patientpath.i4mi.bfh.ch:1234/appointment/full', {
                     headers: {
                         'token': this.token 
@@ -45,20 +45,27 @@ export default class AppointmentManager extends Component {
                    
     }
     
+    //is triggered from children when a change is done to an appointment
+    //reloads the whole appointmentlist
     reload = () => {
         this.setState({loaded : false})
         this.loadAppointments()
     }
 
+    //Is called when the errorDialog is closed
     closeError = () => {
         this.setState({error:false,errorMessage:""})
     }
 
+    //Changes the state property showPassed
+    //When this property is set to true appointments that lie in the past are also shown
     showPassed = () => {
         let invert = !this.state.showPassed
         this.setState({showPassed:invert})
     }
 
+    //sets the patientid of the selected Patient in the PatientSelector
+    //If a patient is selected an appointemnt can be created thorugh a click on the create button
     setPat = (patid) => {
         let disableCreate=true
         if(patid!=0){
@@ -66,7 +73,7 @@ export default class AppointmentManager extends Component {
         }
         this.setState({"patid":patid, "disableCreate":disableCreate})
     }
-
+    
     openAppoCreate = () => {
         this.setState({appoCreateOpen:true})
     }
