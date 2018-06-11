@@ -2,7 +2,8 @@ import React, { Component, Modal} from 'react'
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import Dialog from "material-ui/Dialog";
-import ErrorDialog from "./ErrorDialog"
+import ErrorDialog from "./ErrorDialog";
+import logo from '../img/pathapp.png'; 
 
 export default class Login extends Component {
     constructor(props) {
@@ -55,9 +56,10 @@ export default class Login extends Component {
   render() {
     return (
       <div>
-        <div className="loginwindow">
-            <h1>Login</h1>
+        <div className="loginWindow">
             <div className="loginForm">   
+                <img style={styles.icon} src={logo} alt="pathappicon"/>
+                <h3>Willkommen beim WebInterface für PatientPath</h3>
                 <TextField
                     floatingLabelText = "Benutzername: "
                     name = "username"
@@ -71,8 +73,10 @@ export default class Login extends Component {
                     onChange = {(e) => this.onChange(e)}
                 />
                 <br/>
-                <RaisedButton 
+                <RaisedButton style={styles.button}
                     label = "Login"
+                    labelColor = '#fff'
+                    backgroundColor = '#1c313a'
                     onClick={() => this.loginHandler()} 
                 />
                 <ErrorDialog 
@@ -87,3 +91,25 @@ export default class Login extends Component {
   }
 }
 
+let styles = {
+    container: {
+      flex: 1,
+    },
+    picContainer : {
+        flexGrow: 1,
+        justifyContent:'flex-end',
+        alignItems: 'center',
+    },
+    content : {
+        flex: 1,
+    },
+    button: {
+        width:260,
+        margin: 20,
+    },
+    icon: {
+        width: 48,
+        height: 48,
+        marginTop: 20,
+    }
+  }

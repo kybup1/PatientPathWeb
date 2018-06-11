@@ -57,22 +57,24 @@ export default class Main extends Component {
                         <h1>PatientPath</h1>
                     </div>
                     <div className = "user">
-                        <p>Eingeloggt als: {this.state.practitioner.firstname} {this.state.practitioner.lastname} </p>
-                
+                        Eingeloggt als: {this.state.practitioner.firstname} {this.state.practitioner.lastname}                
                         <RaisedButton 
-                        label = "Log out"
+                        style={styles.button}
+                        label = "Ausloggen"
+                        labelColor = '#fff'
+                        backgroundColor = '#1c313a'
                         onClick = {() => this.logout()}
                         />
                     </div>
                 </div>
-                <div className="tabBar">
+                <div className="tabBar" style={styles.tabs}>
                     <Tabs>
-                        <Tab label="Termine">
+                        <Tab label="Termine"  style={styles.tab}>
                             <AppointmentManager
                                 instid={this.state.practitioner.instid}
                             />
                         </Tab>
-                        <Tab label="Profil">
+                        <Tab label="Profil"  style={styles.tab}>
 
                         </Tab>
                     </Tabs>
@@ -117,3 +119,16 @@ export default class Main extends Component {
         )
     }
 }
+
+let styles = {
+    tab: {
+        backgroundColor: '#4682b4',
+    },
+    tabs: {
+        marginTop: 10,
+    },
+    button: {
+        marginLeft: 10,
+        height: 25,
+    },
+  }

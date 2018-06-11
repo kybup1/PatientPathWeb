@@ -127,13 +127,14 @@ export default class AppointmentModifier extends Component {
             <DatePicker
                 autoOk={true}
                 cancelLabel="Abbrechen"
+                floatingLabelText="Datum"
                 value={startd}
                 onChange={(e, date) => {this.startDateChange(e, date)}}
             />
             <TimePicker
                 autoOk={true}
                 cancelLabel="Abbrechen"
-
+                floatingLabelText="Zeit"
                 name="startd"
                 value={startd}
                 format="24hr"
@@ -161,28 +162,34 @@ export default class AppointmentModifier extends Component {
                 floatingLabelText="Titel"
                 value={this.state.appo.name}
                 onChange = {(e) => this.appoChange(e)}
-            />
+            /> <br/>
             <TextField 
                 name="description"
                 multiLine={true}
                 floatingLabelText="Beschreibung"
                 value={this.state.appo.description}
                 onChange = {(e) => this.appoChange(e)}
-            />
+            /> <br/>
             
             <RaisedButton 
                 label = "Speichern"
-                onClick={() => this.persist()} 
+                onClick={() => this.persist()}
+                labelColor = '#fff'
+                backgroundColor = '#1c313a' 
             />
 
-            <RaisedButton 
+            <RaisedButton style={styles.button}
                 label = "Termin stornieren"
-                onClick={() => this.cancel()} 
+                onClick={() => this.cancel()}
+                labelColor = '#fff'
+                backgroundColor = '#1c313a' 
             />
             
-            <RaisedButton 
+            <RaisedButton style={styles.button}
                 label = "Abbrechen"
-                onClick={() => this.props.close()} 
+                onClick={() => this.props.close()}
+                labelColor = '#fff'
+                backgroundColor = '#1c313a' 
             />
             <ErrorDialog 
                 open={this.state.error}
@@ -193,3 +200,9 @@ export default class AppointmentModifier extends Component {
         )
     }
 }
+
+let styles = {
+    button: {
+        marginLeft: 5,
+    }
+};

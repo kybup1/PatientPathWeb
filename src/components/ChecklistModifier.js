@@ -88,8 +88,8 @@ drawChecklist = () => {
             {<IconButton onClick={() => this.deleteItem(item.chklstitemid)}>
               <ActionDelete></ActionDelete>
             </IconButton>}
+            primaryText={item.name}
           >
-            <p>{item.name}</p>
           </ListItem>
         )
       })
@@ -110,24 +110,46 @@ drawChecklist = () => {
         <List>
           {this.drawChecklist()}
         </List>
+        <div>
         <TextField 
+          style={styles.input}
+          name="nameEintrag"
           floatingLabelText="Name des Eintrages"
           value={this.newItem.name}
           onChange={(e) => {this.newItem.name = e.target.value}}
-        />
+        /> </div><br/>
+
         <RaisedButton 
           label="Eintrag hinzufügen"
+          labelColor = '#fff'
+          backgroundColor = '#1c313a' 
           onClick ={() => this.addItem()}  
         />
-        <RaisedButton 
-          label = "Checkliste entfernen"
-          onClick={() => this.deleteChecklist()} 
-        />
-        <RaisedButton 
+
+        <RaisedButton style={styles.button}
           label = "Abbrechen"
+          labelColor = '#fff'
+          backgroundColor = '#1c313a' 
           onClick={() => this.props.close()} 
         />
+
+        <RaisedButton style={styles.button}
+          label = "Checkliste entfernen"
+          labelColor = '#fff'
+          backgroundColor = '#1c313a' 
+          onClick={() => this.deleteChecklist()} 
+        />
+
       </Dialog>
     )
   }
 }
+
+let styles = {
+  button: {
+      marginLeft: 5,
+  },
+  input: {
+    margin: 0,
+  }
+};
