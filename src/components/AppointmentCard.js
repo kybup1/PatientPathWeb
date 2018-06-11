@@ -42,8 +42,9 @@ export default class AppointmentCard extends Component {
             }).then(res => res.json())
             .then((checklist) => this.props.update())
             .catch(reason => console.log(reason))
+        } else {
+            this.setState({checklistEditOpen:true})
         }
-        this.setState({checklistEditOpen:true})
     }
 
     closeChecklistEdit = () => {
@@ -61,8 +62,12 @@ export default class AppointmentCard extends Component {
     }
 
     //The style is of an AppointmentCard is set differently depending if it lies in the past or not
+    //Furthermore a different style is set when a changerequest of the patient has to be considered
     setAppoStyle = () => {
-        if(new Date(this.props.appointment.startdate) < new Date()){
+        if (this.props.appointment.changerequest==true) {
+            return {color:"red"}
+        }
+        else if(new Date(this.props.appointment.startdate) < new Date()){
             return {color:"grey"}
         } else {
             return {color:"black"}
@@ -97,10 +102,9 @@ export default class AppointmentCard extends Component {
             key={appo.aid} 
             onClick={() => this.openAppoEdit()}
             rightIconButton={this.checklistButton}
-            style={this.setAppoStyle()}
             >
-                <h3>{appo.name}</h3>
-                <h5>{appo.patient.firstname} {appo.patient.lastname}</h5>
+                <h3 style={this.setAppoStyle()}>{appo.name}</h3>
+                <h5 style={this.setAppoStyle()}>{appo.patient.firstname} {appo.patient.lastname}</h5>
                 <p>{this.convertTime(appo.startdate)}</p>
             </ListItem>
             <AppointmentModifier 

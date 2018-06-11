@@ -18,7 +18,7 @@ export default class AppointmentManager extends Component {
             appoCreateOpen:false,
             disableCreate:true,
             showPassed:false,
-            erro:false,
+            error:false,
             errorMessage:"",
             patid:0,
             episodeid:0,
@@ -48,6 +48,7 @@ export default class AppointmentManager extends Component {
     //is triggered from children when a change is done to an appointment
     //reloads the whole appointmentlist
     reload = () => {
+        console.log("called")
         this.setState({loaded : false})
         this.loadAppointments()
     }
@@ -84,9 +85,23 @@ export default class AppointmentManager extends Component {
     }
 
     loaded(){
-        let apposFiltered = this.state.appointments 
+        let apposFiltered = this.state.appointments
+        //Filter out canceled appointments
+        apposFiltered = apposFiltered.filter(appo => appo.canceled != true) 
+    
         if(this.state.showPassed==false){
-            apposFiltered = apposFiltered.filter(appo => new Date(appo.startdate) > new Date())
+            //Appoitments that lie in the past will be removed from the array
+            //Excepte those appointment which have a pending changerequest 
+            apposFiltered = apposFiltered.filter(appo => {
+                let show =false
+                if(new Date(appo.startdate) > new Date()){
+                    show=true
+                } 
+                if (appo.changerequest==true){
+                    show=true
+                }
+                return show
+            })
         }
         if(this.state.patid != 0) {
             apposFiltered = apposFiltered.filter(appo => appo.patient.patid == this.state.patid)
@@ -124,6 +139,7 @@ export default class AppointmentManager extends Component {
                     create={true} open={this.state.appoCreateOpen}
                     close={() => this.closeAppoCreate()}
                     patid = {this.state.patid}
+                    instid = {this.props.instid}
                 />
                 <ErrorDialog 
                     open={this.state.error}

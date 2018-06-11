@@ -68,7 +68,9 @@ export default class Main extends Component {
                 <div className="tabBar">
                     <Tabs>
                         <Tab label="Termine">
-                            <AppointmentManager />
+                            <AppointmentManager
+                                instid={this.state.practitioner.instid}
+                            />
                         </Tab>
                         <Tab label="Profil">
 

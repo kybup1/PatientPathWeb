@@ -1,12 +1,15 @@
 import React, { Component } from 'react'
 import { Dialog, TextField, RaisedButton, DatePicker, TimePicker } from 'material-ui';
+import ErrorDialog from "./ErrorDialog"
 
 export default class AppointmentModifier extends Component {
     constructor(props) {
         super(props);
         this.state = {
             "appo":this.props.appointment,
-            "duration":0
+            "duration":0,
+            error:false,
+            errorMessage:""
         };    
     }
 
@@ -19,6 +22,11 @@ export default class AppointmentModifier extends Component {
         this.setState({
           "appo": appo ,
         });
+    }
+
+    //Is called when the errorDialog is closed
+    closeError = () => {
+        this.setState({error:false,errorMessage:""})
     }
 
     //sets the startdate of an appointment
@@ -55,14 +63,18 @@ export default class AppointmentModifier extends Component {
         appoSave.startdate = appo.startdate;
         appoSave.enddate = appo.enddate;
         appoSave.modified = appo.modified;
+        //After a change the flag for the changerequest will be reset
+        appoSave.changerequest = false;
         //sets the patid depending if a new appointment is created or not
         if(this.props.create == false){
             appoSave.patid = appo.patient.patid;
         } else {
             appoSave.patid = this.props.patid
+            appoSave.instid = this.props.instid
         }
-        if(duration == 0 | duration == null){
-            appoSave.enddate=""
+        if(duration == 0 || duration == null){
+            this.setState({error:true,errorMessage:"Bitte geben sie die Dauer des Termins an"})
+            return
         } else {
             appoSave.enddate = this.calculateEndDate();
         }
@@ -89,6 +101,22 @@ export default class AppointmentModifier extends Component {
             }).then(res => this.props.close())
             .catch(err => console.log(err))
         }
+    }
+
+    cancel = () => {
+        console.log("canceled")
+        fetch("http://patientpath.i4mi.bfh.ch:1234/appointment/"+this.state.appo.aid, {
+                method:"PUT",
+                headers: {
+                    "Content-Type" : "application/json",
+                    "token":this.token, 
+                },
+                body: {
+                    "patid":this.state.appo.patient.patid,
+                    "canceled":true
+                }
+            }).then(res => this.props.close())
+            .catch(err => console.log(err))
     }
 
     initDateTimePicker = () => {
@@ -146,10 +174,20 @@ export default class AppointmentModifier extends Component {
                 label = "Speichern"
                 onClick={() => this.persist()} 
             />
+
+            <RaisedButton 
+                label = "Termin stornieren"
+                onClick={() => this.cancel()} 
+            />
             
             <RaisedButton 
                 label = "Abbrechen"
                 onClick={() => this.props.close()} 
+            />
+            <ErrorDialog 
+                open={this.state.error}
+                close={this.closeError}
+                message={this.state.errorMessage}
             />
          </Dialog>
         )
