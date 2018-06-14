@@ -42,11 +42,11 @@ export default class AppointmentModifier extends Component {
 
     //calculates the enddate property of an appointment depending on the duration that is set
     calculateEndDate = () => {
+        console.log("called: claculateEnddate")
         let startd = new Date(this.state.appo.startdate)
         let duration = this.state.duration
-        let endd =new Date(
-            startd.setMinutes(startd.getMinutes()+duration)
-        )
+        let endd =new Date(this.state.appo.startdate)
+        endd.setTime(endd.getTime()+(duration*60000))
         return endd.toISOString()
     }
 
@@ -61,7 +61,6 @@ export default class AppointmentModifier extends Component {
         appoSave.name = appo.name;
         appoSave.description = appo.description;
         appoSave.startdate = appo.startdate;
-        appoSave.enddate = appo.enddate;
         appoSave.modified = appo.modified;
         //After a change the flag for the changerequest will be reset
         appoSave.changerequest = false;
@@ -136,6 +135,7 @@ export default class AppointmentModifier extends Component {
                 cancelLabel="Abbrechen"
                 floatingLabelText="Zeit"
                 name="startd"
+                minutesStep={5}
                 value={startd}
                 format="24hr"
                 onChange={(e, date) => {this.startDateChange(e, date)}}
