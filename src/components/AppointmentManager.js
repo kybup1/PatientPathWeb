@@ -117,7 +117,10 @@ export default class AppointmentManager extends Component {
         return (
             <div style={bodyStyle}>
                 <div className="selectors">
-                    <PatientSelector setPat={this.setPat} />
+                    <PatientSelector 
+                    setPat={this.setPat} 
+                    selectedPatId={this.state.patid}
+                    />
                 </div>
                 <div className="appointments">
                     <RaisedButton 

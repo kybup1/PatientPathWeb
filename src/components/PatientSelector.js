@@ -47,15 +47,26 @@ export default class PatientSelector extends Component {
         this.props.setPat(0)
     }
 
+    //returns the stacle of a selected listitem by comparing the patientid of the listitem with the selected patient id
+    setSelectedStyle = (patid) => {
+        if (patid!=this.props.selectedPatId){
+            return 
+        }
+        return {
+            border:"2px solid #4682b4"
+        }
+    }
+
     render() {
 
         let patList = this.patsFiltered.map(pat => {
             return (
                 <ListItem
                 key={pat.patid}
+                innerDivStyle={this.setSelectedStyle(pat.patid)}
                 onClick={() => this.props.setPat(pat.patid)}
                 >
-                    <p>{pat.firstname} {pat.lastname}</p>
+                    {pat.firstname} {pat.lastname}
                 </ListItem>
             )
         })
@@ -71,9 +82,10 @@ export default class PatientSelector extends Component {
                 <List>
                     <ListItem
                     key={0}
+                    innerDivStyle={this.setSelectedStyle(0)}
                     onClick={() => this.resetSelection()}
                     >
-                    Alle
+                        Alle
                     </ListItem>
                     {patList}
                 </List>
